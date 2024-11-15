@@ -10,6 +10,10 @@ namespace GameDesignPatterns.Models.Items
 {
     public class Weapon : Item
     {
+        public Weapon(string name, ItemRarity rarity) : base(name, rarity)
+        {
+        }
+
         public int Damage { get; set; }
         public WeaponType WeaponType { get; set; }
     }
