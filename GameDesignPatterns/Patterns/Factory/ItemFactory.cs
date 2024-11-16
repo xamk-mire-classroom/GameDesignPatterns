@@ -19,10 +19,9 @@ namespace GameDesignPatterns.Patterns.Factory
     {
         public override Weapon CreateWeapon(string name)
         {
-            return new Weapon
+            return new Weapon(name, ItemRarity.Common)
             {
-                Name = name,
-                Rarity = ItemRarity.Common,
+                
                 Damage = 10,
                 WeaponType = WeaponType.Melee
             };
@@ -30,10 +29,9 @@ namespace GameDesignPatterns.Patterns.Factory
 
         public override Potion CreatePotion(string name)
         {
-            return new Potion
+            return new Potion(name, ItemRarity.Common)
             {
-                Name = name,
-                Rarity = ItemRarity.Common,
+                
                 Effect = "Heal",
                 Duration = 10
             };
@@ -41,12 +39,10 @@ namespace GameDesignPatterns.Patterns.Factory
 
         public override Armor CreateArmor(string name)
         {
-            return new Armor
-            {
-                Name = name,
-                Rarity = ItemRarity.Common,
-                Defense = 5,
-                Durability = 20
+            return new Armor(name, ItemRarity.Common)
+            { 
+                Defense = 5, 
+                Durability = 20 
             };
         }
     }
@@ -55,10 +51,9 @@ namespace GameDesignPatterns.Patterns.Factory
     {
         public override Weapon CreateWeapon(string name)
         {
-            return new Weapon
+            return new Weapon(name, ItemRarity.Magical)
             {
-                Name = name,
-                Rarity = ItemRarity.Magical,
+           
                 Damage = 15,
                 WeaponType = WeaponType.Ranged
             };
@@ -66,10 +61,8 @@ namespace GameDesignPatterns.Patterns.Factory
 
         public override Potion CreatePotion(string name)
         {
-            return new Potion
-            {
-                Name = name,
-                Rarity = ItemRarity.Magical,
+            return new Potion(name, ItemRarity.Magical)
+            { 
                 Effect = "Mana Restore",
                 Duration = 15
             };
@@ -77,10 +70,9 @@ namespace GameDesignPatterns.Patterns.Factory
 
         public override Armor CreateArmor(string name)
         {
-            return new Armor
+            return new Armor(name, ItemRarity.Magical)
             {
-                Name = name,
-                Rarity = ItemRarity.Magical,
+               
                 Defense = 10,
                 Durability = 30
             };
@@ -91,10 +83,8 @@ namespace GameDesignPatterns.Patterns.Factory
     {
         public override Weapon CreateWeapon(string name)
         {
-            return new Weapon
-            {
-                Name = name,
-                Rarity = ItemRarity.Rare,
+            return new Weapon(name, ItemRarity.Rare) 
+            { 
                 Damage = 20,
                 WeaponType = WeaponType.Melee
             };
@@ -102,10 +92,8 @@ namespace GameDesignPatterns.Patterns.Factory
 
         public override Potion CreatePotion(string name)
         {
-            return new Potion
-            {
-                Name = name,
-                Rarity = ItemRarity.Rare,
+            return new Potion(name, ItemRarity.Rare) 
+            { 
                 Effect = "Greater Heal",
                 Duration = 20
             };
@@ -113,10 +101,8 @@ namespace GameDesignPatterns.Patterns.Factory
 
         public override Armor CreateArmor(string name)
         {
-            return new Armor
+            return new Armor(name, ItemRarity.Rare) 
             {
-                Name = name,
-                Rarity = ItemRarity.Rare,
                 Defense = 15,
                 Durability = 40
             };
@@ -127,21 +113,17 @@ namespace GameDesignPatterns.Patterns.Factory
     {
         public override Weapon CreateWeapon(string name)
         {
-            return new Weapon
+            return new Weapon(name, ItemRarity.Legendary) 
             {
-                Name = name,
-                Rarity = ItemRarity.Legendary,
                 Damage = 30,
-                WeaponType = WeaponType.Ranged
+                WeaponType = WeaponType.Ranged 
             };
         }
 
         public override Potion CreatePotion(string name)
         {
-            return new Potion
+            return new Potion(name, ItemRarity.Legendary) 
             {
-                Name = name,
-                Rarity = ItemRarity.Legendary,
                 Effect = "Godlike Restoration",
                 Duration = 30
             };
@@ -149,10 +131,8 @@ namespace GameDesignPatterns.Patterns.Factory
 
         public override Armor CreateArmor(string name)
         {
-            return new Armor
+            return new Armor(name, ItemRarity.Legendary)
             {
-                Name = name,
-                Rarity = ItemRarity.Legendary,
                 Defense = 20,
                 Durability = 50
             };
