@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GameDesignPatterns.Models;
+using GameDesignPatterns.Models.Characters;
 
 namespace GameDesignPatterns.Patterns.Factory
 {
