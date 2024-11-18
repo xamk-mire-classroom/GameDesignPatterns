@@ -23,9 +23,16 @@ static class Program
         // Demonstrate character abilities
         Console.WriteLine(warrior.UseAbility());  
         Console.WriteLine(mage.UseAbility());     
-        Console.WriteLine(archer.UseAbility());  
+        Console.WriteLine(archer.UseAbility());
 
-        
+
+        // Dynamic strategy change example
+        warrior.ChangeActionStrategy(new HealAction());  // Switch from default to healing
+
+        // Dynamic state change example
+        warrior.ChangeState(new ActionState());  // Switch to action state
+        warrior.ChangeState(new DefendingState());  // Switch to defending state
+
     }
 
 }
