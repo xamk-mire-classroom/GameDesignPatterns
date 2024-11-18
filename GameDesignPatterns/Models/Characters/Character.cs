@@ -11,10 +11,11 @@ namespace GameDesignPatterns.Models
     {
         // Properties from your implementation
         public string Name { get; }
-        public int Health { get; protected set; }
-        public int Mana { get; protected set; }
-        public int Strength { get; protected set; }
-        public int Agility { get; protected set; }
+        public int Health { get;  set; }
+        public int MaxHealth { get; set; }
+        public int Mana { get; set; }
+        public int Strength { get; set; }
+        public int Agility { get; set; }
 
         // Strategy and State pattern properties
         public IActionStrategy CurrentActionStrategy { get; set; }
@@ -24,6 +25,7 @@ namespace GameDesignPatterns.Models
         {
             Name = name;
             Health = health;
+            MaxHealth = health;
             Mana = mana;
             Strength = strength;
             Agility = agility;
@@ -43,6 +45,7 @@ namespace GameDesignPatterns.Models
         public void ChangeActionStrategy(IActionStrategy newStrategy)
         {
             CurrentActionStrategy = newStrategy;
+            CurrentActionStrategy.PerformAction(this);
         }
 
         // State pattern methods
@@ -55,6 +58,8 @@ namespace GameDesignPatterns.Models
         public void PerformAction()
         {
             CurrentState.HandleState(this);
+            CurrentActionStrategy?.PerformAction(this);
+
         }
     }
 }
