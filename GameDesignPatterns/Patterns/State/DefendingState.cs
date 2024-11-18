@@ -9,10 +9,11 @@ namespace GameDesignPatterns.Patterns
 {
     public class DefendingState : ICharacterState
     {
+        private const double DAMAGE_REDUCTION = 0.5;
         public void HandleState(Character character)
         {
             Console.WriteLine($"{character.Name} is in a Defending State.");
-            // Add defending state logic here
+            Console.WriteLine($"{character.Name} reduces incoming damage by {DAMAGE_REDUCTION * 100}%");
         }
     }
 }

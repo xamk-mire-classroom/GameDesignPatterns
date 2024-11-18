@@ -12,7 +12,14 @@ namespace GameDesignPatterns.Patterns
         public void HandleState(Character character)
         {
             Console.WriteLine($"{character.Name} is in an Action State.");
-            character.CurrentActionStrategy.PerformAction(character);
+            if (character.CurrentActionStrategy != null)
+            {
+                character.CurrentActionStrategy.PerformAction(character);
+            }
+            else
+            {
+                Console.WriteLine($"{character.Name} has no action strategy assigned!");
+            }
         }
     }  
 }
