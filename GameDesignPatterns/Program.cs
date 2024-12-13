@@ -27,63 +27,93 @@ class Program
         //DemonstrateGameController();
 
         //Demonstrate Inventory System
-        DemonstrateInventorySystem();
+        //DemonstrateInventorySystem();
+
+        //Demonstrate Game World interaction
+        DemonstrateGameWorldInteraction();
     }
-    static void DemonstrateInventorySystem()
+
+    public static void DemonstrateGameWorldInteraction()
     {
-        Console.WriteLine("\n--- Inventory System Demonstration ---");
+        Console.WriteLine("\n--- Game World Interaction Demonstration ---");
 
-        // Create a character
+        
+
         var warriorFactory = CharacterFactory.CharacterFactoryProvider.GetFactory("warrior");
-        var warrior = warriorFactory.CreateCharacter("Conan");
+        var player = warriorFactory.CreateCharacter("Hero");
 
-        // Create some items using the ItemFactory
-        var commonFactory = new CommonItemFactory();
-        var rareFactory = new RareItemFactory();
+        // Set player's initial position
+        player.CurrentPosition = new Position(0, 0);
+        
 
-        var sword = commonFactory.CreateWeapon("Iron Sword");
-        var armor = rareFactory.CreateArmor("Steel Plate");
-        var potion = commonFactory.CreatePotion("Health Potion");
-        var betterSword = rareFactory.CreateWeapon("Flame Sword");
+        var worldInteraction = new GameWorldInteraction(player);
 
-        // Add items to inventory
-        warrior.AddToInventory(sword);
-        warrior.AddToInventory(armor);
-        warrior.AddToInventory(potion);
-        warrior.AddToInventory(betterSword);
+        // Display initial location
+        worldInteraction.DisplayLocationInfo();
 
-        // Display initial inventory
-        Console.WriteLine("\nInitial inventory:");
-        warrior.DisplayInventory();
-
-        // Try equipping items
-        Console.WriteLine("\nEquipping items:");
-        warrior.EquipItem(sword);
-        warrior.EquipItem(armor);
-        warrior.EquipItem(potion);
-
-        // Display equipment
-        warrior.DisplayEquipment();
-
-        // Try equipping better sword (should unequip current sword)
-        Console.WriteLine("\nEquipping better sword:");
-        warrior.EquipItem(betterSword);
-
-        // Display updated equipment and inventory
-        warrior.DisplayEquipment();
-        warrior.DisplayInventory();
-
-        // Unequip items
-        Console.WriteLine("\nUnequipping items:");
-        warrior.UnequipItem("weapon");
-        warrior.UnequipItem("armor");
-
-        // Final display
-        warrior.DisplayEquipment();
-        warrior.DisplayInventory();
+        Console.WriteLine("\nMoving to Highcastle Town...");
+        if (worldInteraction.MoveToLocation(new Position(2, 2)))
+        {
+            Console.WriteLine("\nTrying to interact with Town Mayor...");
+            worldInteraction.InteractWithNPC("Town Mayor");
+        }
     }
 
-    
+    //static void DemonstrateInventorySystem()
+    //{
+    //    Console.WriteLine("\n--- Inventory System Demonstration ---");
+
+    //    // Create a character
+    //    var warriorFactory = CharacterFactory.CharacterFactoryProvider.GetFactory("warrior");
+    //    var warrior = warriorFactory.CreateCharacter("Conan");
+
+    //    // Create some items using the ItemFactory
+    //    var commonFactory = new CommonItemFactory();
+    //    var rareFactory = new RareItemFactory();
+
+    //    var sword = commonFactory.CreateWeapon("Iron Sword");
+    //    var armor = rareFactory.CreateArmor("Steel Plate");
+    //    var potion = commonFactory.CreatePotion("Health Potion");
+    //    var betterSword = rareFactory.CreateWeapon("Flame Sword");
+
+    //    // Add items to inventory
+    //    warrior.AddToInventory(sword);
+    //    warrior.AddToInventory(armor);
+    //    warrior.AddToInventory(potion);
+    //    warrior.AddToInventory(betterSword);
+
+    //    // Display initial inventory
+    //    Console.WriteLine("\nInitial inventory:");
+    //    warrior.DisplayInventory();
+
+    //    // Try equipping items
+    //    Console.WriteLine("\nEquipping items:");
+    //    warrior.EquipItem(sword);
+    //    warrior.EquipItem(armor);
+    //    warrior.EquipItem(potion);
+
+    //    // Display equipment
+    //    warrior.DisplayEquipment();
+
+    //    // Try equipping better sword (should unequip current sword)
+    //    Console.WriteLine("\nEquipping better sword:");
+    //    warrior.EquipItem(betterSword);
+
+    //    // Display updated equipment and inventory
+    //    warrior.DisplayEquipment();
+    //    warrior.DisplayInventory();
+
+    //    // Unequip items
+    //    Console.WriteLine("\nUnequipping items:");
+    //    warrior.UnequipItem("weapon");
+    //    warrior.UnequipItem("armor");
+
+    //    // Final display
+    //    warrior.DisplayEquipment();
+    //    warrior.DisplayInventory();
+    //}
+
+
 
     //static void DemonstrateGameSystem()
     //{
