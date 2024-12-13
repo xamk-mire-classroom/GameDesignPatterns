@@ -1,24 +1,76 @@
 ﻿using GameDesignPatterns.Enums;
 using GameDesignPatterns.Models.Enemies;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameDesignPatterns.Patterns.Factory
 {
-    public class EnemyFactory
+    // Abstract factory interface
+    public interface IEnemyFactory
     {
-        public IEnemy CreateEnemy(string enemyType, EnemyRank rank)
+        IEnemy CreateEnemy(EnemyRank rank);
+    }
+
+    // Concrete factories for each enemy type
+    public class SlimeFactory : IEnemyFactory
+    {
+        public IEnemy CreateEnemy(EnemyRank rank)
         {
-            return enemyType.ToLower() switch
+            return new Slime(rank);
+        }
+    }
+
+    public class GoblinFactory : IEnemyFactory
+    {
+        public IEnemy CreateEnemy(EnemyRank rank)
+        {
+            return new Goblin(rank);
+        }
+    }
+
+    public class DragonFactory : IEnemyFactory
+    {
+        public IEnemy CreateEnemy(EnemyRank rank)
+        {
+            return new Dragon(rank);
+        }
+    }
+
+    // Factory provider class
+    public class EnemyFactoryProvider
+    {
+        public static IEnemyFactory GetFactory(string enemyType)
+        {
+            switch (enemyType.ToLower())
             {
-                "slime" => new Slime(rank),
-                "goblin" => new Goblin(rank),
-                "dragon" => new Dragon(rank),
-                _ => throw new ArgumentException("Invalid enemy type")
-            };
+                case "slime":
+                    return new SlimeFactory();
+                case "goblin":
+                    return new GoblinFactory();
+                case "dragon":
+                    return new DragonFactory();
+                default:
+                    throw new ArgumentException($"Invalid enemy type: {enemyType}");
+            }
+        }
+    }
+
+    // Optional: Factory registry for dynamic enemy type registration
+    public class EnemyFactoryRegistry
+    {
+        private static readonly Dictionary<string, IEnemyFactory> _factories = new();
+
+        public static void RegisterFactory(string enemyType, IEnemyFactory factory)
+        {
+            _factories[enemyType.ToLower()] = factory;
+        }
+
+        public static IEnemyFactory GetFactory(string enemyType)
+        {
+            if (_factories.TryGetValue(enemyType.ToLower(), out var factory))
+            {
+                return factory;
+            }
+            throw new ArgumentException($"No factory registered for enemy type: {enemyType}");
         }
     }
 }

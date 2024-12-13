@@ -26,11 +26,11 @@ namespace GameDesignPatterns.Patterns.Singleton
             // Initialize world map
             worldMap = new string[][]
             {
-        new string[] { "🌳", "🌳", "🏠", "🌳", "⛰" },
-        new string[] { "🌳", "🏕", "🛣", "🏕", "🌳" },
-        new string[] { "🏰", "🛣", "⛲", "🛣", "🏠" },
-        new string[] { "🌳", "🏕", "🛣", "🏕", "🌳" },
-        new string[] { "⛰", "🌳", "🏠", "🌳", "🌳" }
+                new string[] { "T", "T", "H", "T", "M" },  // T = Tree, H = House, M = Mountain
+                new string[] { "T", "C", "R", "C", "T" },  // C = Camp, R = Road
+                new string[] { "C", "R", "F", "R", "H" },  // F = Fountain
+                new string[] { "T", "C", "R", "C", "T" },
+                new string[] { "M", "T", "H", "T", "T" }
             };
 
             // Initialize NPCs

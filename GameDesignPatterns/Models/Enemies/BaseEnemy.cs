@@ -26,6 +26,8 @@ namespace GameDesignPatterns.Models.Enemies
             Console.WriteLine($"{Name} is attacking.");
         }
 
+        public Position CurrentPosition { get; set; } = new Position();
+
         protected void SetStatsByRank()
         {
             switch (Rank)
