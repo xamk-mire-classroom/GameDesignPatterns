@@ -27,7 +27,7 @@ using System;
         public List<Item> Inventory { get; } = new List<Item>();
 
         // Strategy and State pattern properties
-        public IActionStrategy CurrentActionStrategy { get; set; }
+        public IActionStrategy? CurrentActionStrategy { get; set; }
         public ICharacterState CurrentState { get; set; }
 
             protected Character(string name, int health, int mana, int strength, int agility)
@@ -205,9 +205,12 @@ using System;
             public void PerformAction()
             {
 
-            CurrentState.HandleState(this, CurrentActionStrategy);
-            
+            if (CurrentActionStrategy != null)
+            {
+                CurrentState.HandleState(this, CurrentActionStrategy);
             }
+
+        }
 
             //Method to move the character
             public void Move(int dx, int dy) 
