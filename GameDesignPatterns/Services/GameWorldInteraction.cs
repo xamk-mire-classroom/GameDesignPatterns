@@ -106,5 +106,25 @@ namespace GameDesignPatterns.Services
                 // Could trigger combat or other events here
             }
         }
+
+        // In GameWorldInteraction.cs
+        public void HandleInput(ConsoleKey key)
+        {
+            switch (key)
+            {
+                case ConsoleKey.UpArrow:
+                    MoveToLocation(new Position(player.CurrentPosition.X, player.CurrentPosition.Y + 1));
+                    break;
+                case ConsoleKey.DownArrow:
+                    MoveToLocation(new Position(player.CurrentPosition.X, player.CurrentPosition.Y - 1));
+                    break;
+                case ConsoleKey.LeftArrow:
+                    MoveToLocation(new Position(player.CurrentPosition.X - 1, player.CurrentPosition.Y));
+                    break;
+                case ConsoleKey.RightArrow:
+                    MoveToLocation(new Position(player.CurrentPosition.X + 1, player.CurrentPosition.Y));
+                    break;
+            }
+        }
     }
 }
