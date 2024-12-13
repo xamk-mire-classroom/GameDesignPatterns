@@ -32,6 +32,20 @@ namespace GameDesignPatterns.Models
             return Math.Sqrt(dx * dx + dy * dy);
         }
 
+        // Methods for proper Dictionary key comparison
+        public override bool Equals(object? obj)
+        {
+            if (obj is not Position other)
+                return false;
+
+            return X == other.X && Y == other.Y;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y);
+        }
+
         //Override to string for easy printing
         public override string ToString() => $"({X} {Y})";
 
