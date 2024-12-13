@@ -19,6 +19,9 @@ using System;
             public int Strength { get; set; }
             public int Agility { get; set; }
             public Position CurrentPosition { get; set; } = new Position();
+            public Weapon? EquippedWeapon { get; private set; }
+            public Armor? EquippedArmor { get; private set; }
+            public Potion? EquippedPotion { get; private set; }
 
         // Inventory to hold all items
         public List<Item> Inventory { get; } = new List<Item>();
@@ -41,6 +44,7 @@ using System;
                 InitializeDefaultStrategy();
             }
 
+       
         public void AddToInventory(Item item)
         {
             Inventory.Add(item);
@@ -77,6 +81,107 @@ using System;
             }
         }
 
+        // Equipment methods
+        public bool EquipItem(Item item)
+        {
+            // Check if item is in inventory
+            if (!Inventory.Contains(item))
+            {
+                Console.WriteLine($"{item.Name} is not in {Name}'s inventory.");
+                return false;
+            }
+
+            switch (item)
+            {
+                case Weapon weapon:
+                    if (EquippedWeapon != null)
+                    {
+                        // Put currently equipped weapon back in inventory
+                        Inventory.Add(EquippedWeapon);
+                    }
+                    EquippedWeapon = weapon;
+                    Inventory.Remove(weapon);
+                    Console.WriteLine($"{Name} equipped {weapon.Name} as weapon.");
+                    return true;
+
+                case Armor armor:
+                    if (EquippedArmor != null)
+                    {
+                        // Put currently equipped armor back in inventory
+                        Inventory.Add(EquippedArmor);
+                    }
+                    EquippedArmor = armor;
+                    Inventory.Remove(armor);
+                    Console.WriteLine($"{Name} equipped {armor.Name} as armor.");
+                    return true;
+
+                case Potion potion:
+                    if (EquippedPotion != null)
+                    {
+                        // Put currently equipped potion back in inventory
+                        Inventory.Add(EquippedPotion);
+                    }
+                    EquippedPotion = potion;
+                    Inventory.Remove(potion);
+                    Console.WriteLine($"{Name} equipped {potion.Name} in utility slot.");
+                    return true;
+
+                default:
+                    Console.WriteLine($"Cannot equip {item.Name} - unknown item type.");
+                    return false;
+            }
+        }
+
+        public bool UnequipItem(string slot)
+        {
+            switch (slot.ToLower())
+            {
+                case "weapon":
+                    if (EquippedWeapon == null)
+                    {
+                        Console.WriteLine($"{Name} has no weapon equipped.");
+                        return false;
+                    }
+                    Inventory.Add(EquippedWeapon);
+                    Console.WriteLine($"{Name} unequipped {EquippedWeapon.Name}.");
+                    EquippedWeapon = null;
+                    return true;
+
+                case "armor":
+                    if (EquippedArmor == null)
+                    {
+                        Console.WriteLine($"{Name} has no armor equipped.");
+                        return false;
+                    }
+                    Inventory.Add(EquippedArmor);
+                    Console.WriteLine($"{Name} unequipped {EquippedArmor.Name}.");
+                    EquippedArmor = null;
+                    return true;
+
+                case "potion":
+                    if (EquippedPotion == null)
+                    {
+                        Console.WriteLine($"{Name} has no potion equipped.");
+                        return false;
+                    }
+                    Inventory.Add(EquippedPotion);
+                    Console.WriteLine($"{Name} unequipped {EquippedPotion.Name}.");
+                    EquippedPotion = null;
+                    return true;
+
+                default:
+                    Console.WriteLine($"Invalid equipment slot: {slot}");
+                    return false;
+            }
+        }
+
+        public void DisplayEquipment()
+        {
+            Console.WriteLine($"\n{Name}'s Equipment:");
+            Console.WriteLine($"Weapon Slot: {(EquippedWeapon == null ? "Empty" : $"{EquippedWeapon.Name} ({EquippedWeapon.Rarity})")}");
+            Console.WriteLine($"Armor Slot: {(EquippedArmor == null ? "Empty" : $"{EquippedArmor.Name} ({EquippedArmor.Rarity})")}");
+            Console.WriteLine($"Utility Slot: {(EquippedPotion == null ? "Empty" : $"{EquippedPotion.Name} ({EquippedPotion.Rarity})")}");
+        }
 
         // Method to be implemented by derived classes to set their default strategy
         protected abstract void InitializeDefaultStrategy();
