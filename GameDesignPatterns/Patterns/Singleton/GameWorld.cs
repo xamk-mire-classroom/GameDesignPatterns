@@ -5,61 +5,74 @@ using System.Text;
 using System.Threading.Tasks;
 using GameDesignPatterns.Enums;
 using GameDesignPatterns.Models;
+using GameDesignPatterns.Models.Locations;
 
 namespace GameDesignPatterns.Patterns.Singleton
 {
-    // Singleton Pattern - Game World
-
-    // GameWorld singleton class
     public class GameWorld
     {
-        private static GameWorld instance;
-        private string[][] worldMap;
-        private List<NPC> npcs;
+        private static GameWorld? instance;
+        private readonly Dictionary<Position, Location> locations = new Dictionary<Position, Location>();
         private Weather weather;
         private TimeOfDay timeOfDay;
 
         private GameWorld()
         {
-            // Initialize world map, NPCs, etc.
+            InitializeWorld();
+        }
 
-            // Initialize world map
-            worldMap = new string[][]
-            {
-                new string[] { "T", "T", "H", "T", "M" },  // T = Tree, H = House, M = Mountain
-                new string[] { "T", "C", "R", "C", "T" },  // C = Camp, R = Road
-                new string[] { "C", "R", "F", "R", "H" },  // F = Fountain
-                new string[] { "T", "C", "R", "C", "T" },
-                new string[] { "M", "T", "H", "T", "T" }
-            };
+        private void InitializeWorld()
+        {
+            // Create locations
+            CreateLocation("Riverwood Village", LocationType.Village, new Position(0, 0));
+            CreateLocation("Highcastle Town", LocationType.Town, new Position(2, 2));
+            CreateLocation("Dark Cave", LocationType.Dungeon, new Position(1, 1));
 
-            // Initialize NPCs
-            npcs = new List<NPC>
-    {
-        new NPC(1, "Old Sage", "Quest Giver", (2, 2)),
-        new NPC(2, "Merchant", "Trader", (0, 2))
-    };
-
-            // Initialize weather and time of day
             weather = Weather.Sunny;
             timeOfDay = TimeOfDay.Morning;
         }
 
-        public static GameWorld getInstance()
+        private void CreateLocation(string name, LocationType type, Position position)
         {
-            if (instance == null)
+            var location = new Location(name, type, position);
+            locations[position] = location;
+
+            // Add NPCs based on location type
+            switch (type)
             {
-                instance = new GameWorld();
+                case LocationType.Village:
+                    location.AddNPC(new NPC(GetNextNPCId(), "Village Elder", NPCType.Villager, position));
+                    location.AddNPC(new NPC(GetNextNPCId(), "Traveling Merchant", NPCType.Merchant, position));
+                    break;
+                case LocationType.Town:
+                    location.AddNPC(new NPC(GetNextNPCId(), "Town Mayor", NPCType.Royalty, position));
+                    location.AddNPC(new NPC(GetNextNPCId(), "Shop Owner", NPCType.Merchant, position));
+                    break;
+                case LocationType.Dungeon:
+                    // Dungeons might have special NPCs or none at all
+                    break;
             }
+        }
+
+        private int npcIdCounter = 0;
+        private int GetNextNPCId() => ++npcIdCounter;
+
+        public static GameWorld GetInstance()
+        {
+            instance ??= new GameWorld();
             return instance;
         }
 
-        // Getter and setter methods for game state
-        public string[][] GetWorldMap() { return worldMap; }
-        public List<NPC> GetNPCs() { return npcs; }
-        public Weather GetWeather() { return weather; }
-        public TimeOfDay GetTimeOfDay() { return timeOfDay; }
-        public void SetWeather(Weather newWeather) { weather = newWeather; }
-        public void SetTimeOfDay(TimeOfDay newTime) { timeOfDay = newTime; }
+        public Location? GetLocation(Position position)
+        {
+            return locations.TryGetValue(position, out var location) ? location : null;
+        }
+
+        public IEnumerable<Location> GetAllLocations() => locations.Values;
+        public Weather GetWeather() => weather;
+        public TimeOfDay GetTimeOfDay() => timeOfDay;
+        public void SetWeather(Weather newWeather) => weather = newWeather;
+        public void SetTimeOfDay(TimeOfDay newTime) => timeOfDay = newTime;
+
     }
 }
