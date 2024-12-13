@@ -9,17 +9,16 @@ namespace GameDesignPatterns.Patterns
 {
     public class ActionState : ICharacterState
     {
-        public void HandleState(Character character)
+        public void HandleState(Character character, IActionStrategy actionStrategy)
         {
-            Console.WriteLine($"{character.Name} is in an Action State.");
-            if (character.CurrentActionStrategy != null)
-            {
-                character.CurrentActionStrategy.PerformAction(character);
-            }
-            else
-            {
-                Console.WriteLine($"{character.Name} has no action strategy assigned!");
-            }
+            Console.WriteLine($"{character.Name} is in action state.");
+            actionStrategy.PerformAction(character);
         }
+
+        public override string ToString()
+        {
+            return "Action state";
+        }
+        
     }  
 }

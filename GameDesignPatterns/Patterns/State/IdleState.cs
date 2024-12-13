@@ -9,12 +9,16 @@ namespace GameDesignPatterns.Patterns
 {
     public class IdleState : ICharacterState
     {
-        public void HandleState(Character character)
+        public void HandleState(Character character, IActionStrategy actionStrategy)
         {
             Console.WriteLine($"{character.Name} is in an Idle State.");
-            // Passive regeneration or other idle state mechanics
-            character.Health = Math.Min(character.Health + 5, character.MaxHealth);
-            Console.WriteLine($"{character.Name} passively recovers 5 health. Current Health: {character.Health}");
+            actionStrategy.PerformAction(character);
         }
+
+        public override string ToString()
+        {
+            return "Idle state";
+        }
+        
     }
 }

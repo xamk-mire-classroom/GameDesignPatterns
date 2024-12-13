@@ -9,6 +9,6 @@ namespace GameDesignPatterns.Patterns
 {
     public interface ICharacterState
     {
-        void HandleState(Character character);
+        void HandleState(Character character, IActionStrategy actionStrategy);
     }
 }
