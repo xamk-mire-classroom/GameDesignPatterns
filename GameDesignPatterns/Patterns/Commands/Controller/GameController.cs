@@ -11,11 +11,11 @@ namespace GameDesignPatterns.Patterns.Command.Controller
     public class GameController
     {
         private readonly Character _character;
-        private readonly BaseEnemy _target;
+        private readonly BaseEnemy? _target;
         private readonly Stack<ICommand> _commandHistory;
         private readonly Dictionary<ConsoleKey, ICommand> _commandMap;
 
-        public GameController(Character character, BaseEnemy target)
+        public GameController(Character character, BaseEnemy? target)
         {
             _character = character;
             _target = target;
@@ -25,14 +25,21 @@ namespace GameDesignPatterns.Patterns.Command.Controller
 
         private Dictionary<ConsoleKey, ICommand> InitializeCommandMap()
         {
-            return new Dictionary<ConsoleKey, ICommand>
+            var commands = new Dictionary<ConsoleKey, ICommand>
             {
-                { ConsoleKey.A, new AttackCommand(_character, _target) },
+                
                 { ConsoleKey.D, new DefendCommand(_character) },
                 { ConsoleKey.H, new HealCommand(_character) },
                 {ConsoleKey.M, new ChangeStateCommand(_character) },
                 
             };
+            // Only add attack command if we have a target
+            if (_target != null)
+            {
+                commands.Add(ConsoleKey.A, new AttackCommand(_character, _target));
+            }
+
+            return commands;
         }
 
         public void HandleInput(ConsoleKey key)
