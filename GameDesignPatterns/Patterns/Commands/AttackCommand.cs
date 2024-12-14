@@ -21,16 +21,17 @@ namespace GameDesignPatterns.Patterns.Commands
             
         }
 
-        
+
 
         public void Execute()
         {
-           
-
-
             Console.WriteLine($"{_character.Name} attacks {_target.Name}");
-            _character.ChangeState(new ActionState());
-            _character.PerformAction();
+
+            // Calculate and deal damage
+            int damage = _character.Strength + (_character.EquippedWeapon?.Damage ?? 0);
+            _target.Health -= damage;
+
+            Console.WriteLine($"Dealt {damage} damage!");
         }
 
     }

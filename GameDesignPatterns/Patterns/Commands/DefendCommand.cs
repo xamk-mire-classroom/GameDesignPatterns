@@ -20,11 +20,9 @@ namespace GameDesignPatterns.Patterns.Commands
 
         public void Execute()
         {
-            
-            // Change to defending state
-            _character.ChangeState(new DefendingState());
-
-            Console.WriteLine($"{_character.Name} enters a defensive stance!");
+            // Add actual defense bonus or damage reduction for next enemy turn
+            _character.Health += 5; // Temporary HP or defense boost
+            Console.WriteLine($"{_character.Name} takes a defensive stance and gains some protection!");
         }
     }
 }
