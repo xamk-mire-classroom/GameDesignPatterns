@@ -23,10 +23,13 @@ namespace GameDesignPatterns.Patterns.Singleton
 
         private void InitializeWorld()
         {
-            // Create locations
-            CreateLocation("Riverwood Village", LocationType.Village, new Position(0, 0));
-            CreateLocation("Highcastle Town", LocationType.Town, new Position(2, 2));
-            CreateLocation("Dark Cave", LocationType.Dungeon, new Position(1, 1));
+
+            // Create locations with more spread out coordinates
+            CreateLocation("Riverwood Village", LocationType.Village, new Position(0, 0));    // Center
+            CreateLocation("Dark Cave", LocationType.Dungeon, new Position(-1, 0));          // West
+            CreateLocation("Highcastle Town", LocationType.Town, new Position(1, 0));        // East
+            CreateLocation("Forest Camp", LocationType.Village, new Position(0, 1));         // North
+            CreateLocation("Lake Settlement", LocationType.Village, new Position(0, -1));    // South
 
             weather = Weather.Sunny;
             timeOfDay = TimeOfDay.Morning;
