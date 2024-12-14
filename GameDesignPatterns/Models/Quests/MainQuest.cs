@@ -1,4 +1,7 @@
-﻿using System;
+﻿using GameDesignPatterns.Enums;
+using GameDesignPatterns.Services;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace GameDesignPatterns.Models.Quests
@@ -7,6 +10,8 @@ namespace GameDesignPatterns.Models.Quests
     {
         public int RequiredKills { get; private set; }
         private int _currentKills;
+        public int CurrentKills => _currentKills;
+        public readonly QuestManager questManager;
 
         public MainQuest(string title, string description, int requiredKills)
         {
@@ -19,17 +24,30 @@ namespace GameDesignPatterns.Models.Quests
 
         public override void UpdateProgress(object progressData)
         {
-            if (progressData is int kills)
+            // First check if quest is already completed
+            if (Status == QuestStatus.Completed)
+            {
+                return;  // Don't process updates for completed quests
+            }
+
+            if (progressData is int kills && Status == QuestStatus.InProgress)
             {
                 _currentKills += kills;
-
+                
                 if (_currentKills >= RequiredKills)
                 {
-                    Complete();
+                    _currentKills = RequiredKills; 
+                    Complete();                
+                    Console.WriteLine($"Quest '{Title}' completed!");
+                    return;
                 }
 
                 Console.WriteLine($"Progress: {_currentKills}/{RequiredKills} kills");
             }
+        }
+        public override void Start()
+        {
+            Status = QuestStatus.InProgress;
         }
     }
 }
