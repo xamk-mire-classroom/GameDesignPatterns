@@ -28,12 +28,14 @@ namespace GameDesignPatterns.Services
             var targetLocation = gameWorld.GetLocation(newPosition);
             if (targetLocation == null)
             {
-                Console.WriteLine("Cannot move there - no location exists at that position.");
+                Console.WriteLine($"Cannot move to position {newPosition} - no location exists there.");
+                Console.WriteLine("Try a different direction!");
                 return false;
             }
 
             player.CurrentPosition = newPosition;
             currentLocation = targetLocation;
+            Console.WriteLine($"\nMoved to {currentLocation.Name}!");
             DisplayLocationInfo();
             return true;
         }
@@ -107,22 +109,31 @@ namespace GameDesignPatterns.Services
             }
         }
 
-        // In GameWorldInteraction.cs
+
         public void HandleInput(ConsoleKey key)
         {
+            Position newPosition;
             switch (key)
             {
                 case ConsoleKey.UpArrow:
-                    MoveToLocation(new Position(player.CurrentPosition.X, player.CurrentPosition.Y + 1));
+                    newPosition = new Position(player.CurrentPosition.X, player.CurrentPosition.Y + 1);
+                    Console.WriteLine($"Attempting to move North to position {newPosition}");
+                    MoveToLocation(newPosition);
                     break;
                 case ConsoleKey.DownArrow:
-                    MoveToLocation(new Position(player.CurrentPosition.X, player.CurrentPosition.Y - 1));
+                    newPosition = new Position(player.CurrentPosition.X, player.CurrentPosition.Y - 1);
+                    Console.WriteLine($"Attempting to move South to position {newPosition}");
+                    MoveToLocation(newPosition);
                     break;
                 case ConsoleKey.LeftArrow:
-                    MoveToLocation(new Position(player.CurrentPosition.X - 1, player.CurrentPosition.Y));
+                    newPosition = new Position(player.CurrentPosition.X - 1, player.CurrentPosition.Y);
+                    Console.WriteLine($"Attempting to move West to position {newPosition}");
+                    MoveToLocation(newPosition);
                     break;
                 case ConsoleKey.RightArrow:
-                    MoveToLocation(new Position(player.CurrentPosition.X + 1, player.CurrentPosition.Y));
+                    newPosition = new Position(player.CurrentPosition.X + 1, player.CurrentPosition.Y);
+                    Console.WriteLine($"Attempting to move East to position {newPosition}");
+                    MoveToLocation(newPosition);
                     break;
             }
         }
