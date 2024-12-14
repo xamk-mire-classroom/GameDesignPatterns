@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using GameDesignPatterns.Models;
 using GameDesignPatterns.Models.Items;
 using System.Numerics;
+using GameDesignPatterns.Models.Quests;
 
 class Program
 {
@@ -20,8 +21,8 @@ class Program
         Console.WriteLine("Welcome to the Game!");
         var player = CharacterCreation();
         var gameWorld = GameWorld.GetInstance();
-        var worldInteraction = new GameWorldInteraction(player);
         var questManager = new QuestManager(new QuestFactory());
+        var worldInteraction = new GameWorldInteraction(player, questManager);
         BaseEnemy? currentEnemy = null;
         var gameController = new GameController(player,currentEnemy);
 
@@ -185,10 +186,10 @@ class Program
                 case '2':
                     Console.WriteLine("\nAvailable moves:");
                     Console.WriteLine("Use arrow keys to move:");
-                    Console.WriteLine("↑ - Move North");
-                    Console.WriteLine("↓ - Move South");
-                    Console.WriteLine("← - Move West");
-                    Console.WriteLine("→ - Move East");
+                    Console.WriteLine("Up - Move North");
+                    Console.WriteLine("Down - Move South");
+                    Console.WriteLine("Left - Move West");
+                    Console.WriteLine("Right - Move East");
                     Console.WriteLine("Press any other key to cancel");
 
                     var key = Console.ReadKey(true).Key;
@@ -207,7 +208,7 @@ class Program
                     }
                     break;
                 case '4':
-                    InitiateCombat(player);
+                    InitiateCombat(player, worldInteraction);
                     break;
                 case '5':
                     exploring = false;
@@ -219,7 +220,7 @@ class Program
         }
     }
 
-    static void InitiateCombat(Character player)
+    static void InitiateCombat(Character player, GameWorldInteraction worldInteraction)
     {
         Console.WriteLine("\n=== Combat Initiated ===");
 
@@ -237,13 +238,25 @@ class Program
             if (enemy.Health <= 0)
             {
                 Console.WriteLine($"\nYou defeated the {enemy.Name}!");
-                break;  // Exit combat loop
+                // Update any active main quests
+                foreach (var quest in worldInteraction.questManager.GetActiveQuests().ToList())
+                {
+                    if (quest is MainQuest mainQuest && quest.Status != QuestStatus.Completed)
+                    {
+                        mainQuest.UpdateProgress(1);
+                        if (quest.Status == QuestStatus.Completed)
+                        {
+                            worldInteraction.questManager.UpdateQuestStatus(quest);
+                        }
+                    }
+                }
+                break;
             }
             if (player.Health <= 0)
             {
                 Console.WriteLine("\nYou have been defeated! Returning to town...");
                 player.Health = player.MaxHealth / 2;  // Revive with half health
-                break;  // Exit combat loop
+                break;  
             }
 
             Console.WriteLine($"\n{player.Name}'s HP: {player.Health}/{player.MaxHealth}");
@@ -392,7 +405,19 @@ class Program
         Console.WriteLine("\nActive Quests:");
         foreach (var quest in questManager.GetActiveQuests())
         {
-            Console.WriteLine($"- {quest.Title}: {quest.Status}");
+            // Only show InProgress quests here
+            if (quest.Status == QuestStatus.InProgress)
+            {
+                if (quest is MainQuest mainQuest)
+                {
+                    Console.WriteLine($"- {quest.Title}: {quest.Status}");
+                    Console.WriteLine($"  Progress: {mainQuest.CurrentKills}/{mainQuest.RequiredKills} kills");
+                }
+                else
+                {
+                    Console.WriteLine($"- {quest.Title}: {quest.Status}");
+                }
+            }
         }
 
         Console.WriteLine("\nCompleted Quests:");
