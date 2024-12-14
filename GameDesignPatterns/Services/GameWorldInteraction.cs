@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameDesignPatterns.Patterns.Factory;
+using GameDesignPatterns.Models.Quests;
 
 namespace GameDesignPatterns.Services
 {
@@ -15,12 +17,14 @@ namespace GameDesignPatterns.Services
         private readonly GameWorld gameWorld;
         private readonly Character player;
         private Location? currentLocation;
+        public readonly QuestManager questManager;
 
-        public GameWorldInteraction(Character player)
+        public GameWorldInteraction(Character player, QuestManager questManager)
         {
             this.gameWorld = GameWorld.GetInstance();
             this.player = player;
             this.currentLocation = gameWorld.GetLocation(player.CurrentPosition);
+            this.questManager = questManager;
         }
 
         public bool MoveToLocation(Position newPosition)
@@ -74,20 +78,82 @@ namespace GameDesignPatterns.Services
             Console.WriteLine($"\nInteracting with {npc.Name}");
             Console.WriteLine(npc.GetDialogue("greeting"));
 
+            // Check if NPC has any available quests
+            if (!npc.OfferedQuests.Any())
+            {
+                // Create appropriate quest based on NPC type
+                CreateNPCQuest(npc);
+            }
+            
             if (npc.OfferedQuests.Any())
             {
-                Console.WriteLine(npc.GetDialogue("quest"));
+                // Display and manage available quests
                 DisplayAvailableQuests(npc);
+                
+            }
+
+            //Check for active quests that can be completed
+            foreach (var quest in questManager.GetActiveQuests())
+            {
+                if (quest.Status == QuestStatus.InProgress)
+                {
+                    if (quest is MainQuest mainQuest && mainQuest.CurrentKills >= mainQuest.RequiredKills)
+                    {
+                        Console.WriteLine($"\nReady to complete: {quest.Title}");
+                        Console.WriteLine("Complete quest? (Y/N)");
+                        if (Console.ReadKey(true).Key == ConsoleKey.Y)
+                        {
+                            quest.Complete();
+                        }
+                    }
+                    // Similar check for SideQuest if needed
+                }
+            }
+        }
+
+        private void CreateNPCQuest(NPC npc)
+        {
+            IQuest? quest = npc.Type switch
+            {
+                NPCType.Royalty => questManager.CreateMainQuest(
+                    "Royal Command",
+                    "Defeat the monsters threatening our realm",
+                    5),
+                NPCType.Merchant => questManager.CreateSideQuest(
+                    "Merchant's Request",
+                    "Collect trading goods",
+                    new List<string> { "Find rare herbs", "Collect minerals", "Gather wood" }),
+                NPCType.Villager => questManager.CreateSideQuest(
+                    "Village Aid",
+                    "Help the village with various tasks",
+                    new List<string> { "Fix the fence", "Clear the garden", "Find lost sheep" }),
+                _ => null
+            };
+
+            if (quest != null)
+            {
+                npc.OfferedQuests.Add(quest);
             }
         }
 
         private void DisplayAvailableQuests(NPC npc)
         {
             Console.WriteLine("\nAvailable Quests:");
+            
             foreach (var quest in npc.OfferedQuests)
             {
                 Console.WriteLine($"- {quest.Title}: {quest.Description}");
                 Console.WriteLine($"  Reward: {quest.RewardExperience} XP");
+
+                if (quest.Status == QuestStatus.NotStarted)
+                {
+                    Console.WriteLine("Accept this quest? (Y/N)");
+                    if (Console.ReadKey(true).Key == ConsoleKey.Y)
+                    {
+                        quest.Start();
+                        Console.WriteLine($"\nAccepted quest: {quest.Title}");
+                    }
+                }
             }
         }
 
