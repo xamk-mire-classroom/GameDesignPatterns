@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameDesignPatterns.Enums;
 using GameDesignPatterns.Models.Quests;
 using GameDesignPatterns.Patterns.Factory;
 
@@ -65,10 +66,14 @@ namespace GameDesignPatterns.Services
         // Method to update quest status and move completed quests
         public void UpdateQuestStatus(IQuest quest)
         {
-            if (quest.Status == Enums.QuestStatus.Completed)
+            if (quest.Status == QuestStatus.Completed)
             {
-                _activeQuests.Remove(quest);
-                _completedQuests.Add(quest);
+                if (_activeQuests.Contains(quest))
+                {
+                    _activeQuests.Remove(quest);
+                    _completedQuests.Add(quest);
+                    
+                }
             }
         }
     }
